@@ -1,4 +1,4 @@
-package com.zimo.springbootstu.interfac;
+package com.zimo.springbootstu.interceptor;
 
 import com.zimo.springbootstu.exception.ZimoException;
 import com.zimo.springbootstu.utils.RedisUtil;
@@ -35,7 +35,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             if(annotation != null) {
                 logger.info("token:" + token);
                 if(token == null || "".equals(token)) {
-                    throw new ZimoException("-1","不存在token");
+                    throw new ZimoException("-1","请登录");
                 }
                 // 校验token 正确性
                 String username = TokenUtils.getInfo(token, "username");
@@ -54,9 +54,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                     UserType annotation1 = method.getAnnotation(UserType.class);
                     if (annotation1 != null) {
                         Integer perNum = Integer.valueOf(TokenUtils.getInfo(token, "perNum"));
-                        String validate = annotation1.validate();
-                        String perN = perNum + "";
-                        if (validate.equals(perN)) {
+                        Integer validate = Integer.valueOf(annotation1.validate());
+                        if(perNum >= validate) {
                             return true;
                         }
                         throw new ZimoException("-1","权限不够");

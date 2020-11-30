@@ -1,4 +1,4 @@
-package com.zimo.springbootstu.interfac;
+package com.zimo.springbootstu.interceptor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public com.zimo.springbootstu.interfac.AuthorizationInterceptor authorizationInterceptor() {
-        return new com.zimo.springbootstu.interfac.AuthorizationInterceptor();
+    public com.zimo.springbootstu.interceptor.AuthorizationInterceptor authorizationInterceptor() {
+        return new com.zimo.springbootstu.interceptor.AuthorizationInterceptor();
     }
 }

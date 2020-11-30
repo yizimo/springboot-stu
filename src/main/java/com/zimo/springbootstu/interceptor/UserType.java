@@ -1,4 +1,4 @@
-package com.zimo.springbootstu.interfac;
+package com.zimo.springbootstu.interceptor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Token {
-    boolean validate() default true;
+public @interface UserType {
+    String validate() default "";
 }

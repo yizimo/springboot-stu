@@ -1,6 +1,6 @@
 package com.zimo.springbootstu.exception;
 
-import com.zimo.springbootstu.interfac.BaseErrorInfoInterface;
+import com.zimo.springbootstu.interceptor.BaseErrorInfoInterface;
 
 public class ZimoException extends RuntimeException{
 

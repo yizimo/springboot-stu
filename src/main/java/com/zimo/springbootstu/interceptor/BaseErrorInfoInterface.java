@@ -1,4 +1,4 @@
-package com.zimo.springbootstu.interfac;
+package com.zimo.springbootstu.interceptor;
 
 public interface BaseErrorInfoInterface {
     // 错误码

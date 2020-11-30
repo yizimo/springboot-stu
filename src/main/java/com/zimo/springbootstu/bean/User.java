@@ -6,6 +6,7 @@ public class User {
     private String username;
     private String telephone;
     private String password;
+    private String info;
     private Integer type;
 
     public Integer getId() {
@@ -40,6 +41,14 @@ public class User {
         this.password = password;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     public Integer getType() {
         return type;
     }
@@ -55,6 +64,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", password='" + password + '\'' +
+                ", info='" + info + '\'' +
                 ", type=" + type +
                 '}';
     }

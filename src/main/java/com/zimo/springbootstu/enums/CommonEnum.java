@@ -1,6 +1,6 @@
 package com.zimo.springbootstu.enums;
 
-import com.zimo.springbootstu.interfac.BaseErrorInfoInterface;
+import com.zimo.springbootstu.interceptor.BaseErrorInfoInterface;
 
 public enum CommonEnum implements BaseErrorInfoInterface {
 

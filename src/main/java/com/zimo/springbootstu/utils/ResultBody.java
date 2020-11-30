@@ -1,7 +1,7 @@
 package com.zimo.springbootstu.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zimo.springbootstu.interfac.BaseErrorInfoInterface;
+import com.zimo.springbootstu.interceptor.BaseErrorInfoInterface;
 import com.zimo.springbootstu.enums.CommonEnum;
 
 public class ResultBody {

@@ -1,9 +1,7 @@
 package com.zimo.springbootstu.service;
 
 import com.zimo.springbootstu.bean.Category;
-import com.zimo.springbootstu.interfac.UserType;
 import com.zimo.springbootstu.mybatis.dao.CategoryMapper;
-import com.zimo.springbootstu.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
