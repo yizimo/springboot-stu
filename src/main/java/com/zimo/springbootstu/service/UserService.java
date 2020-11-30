@@ -67,9 +67,19 @@ public class UserService {
         if(password.equals(user.getPassword())) {
             String token = TokenUtils.token(username, user.getType());
             redisUtil.setByTime(username,token);
-            return Msg.success();
+            return Msg.success().add("user",user);
         }
         return Msg.fail().add("info","密码错误");
+    }
+
+    /**
+     * 修改简介
+     * @param user
+     * @return
+     */
+    public Msg updateUserInfo(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
+        return Msg.success();
     }
 
 

@@ -1,13 +1,21 @@
 package com.zimo.springbootstu.bean;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+
 public class User {
 
+    @Id
+    @Column(name = "id")
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
     private String username;
     private String telephone;
     private String password;
     private String info;
-    private Integer type;
+    private Integer type; // 1 用户 2  教师 3  管理员
 
     public Integer getId() {
         return id;
