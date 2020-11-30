@@ -1,0 +1,19 @@
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zimo.springbootstu.bean
+  configuration:
+    map-underscore-to-camel-case:  true
+mapper:
+  mappers: com.zimo.springbootstu.mybatis.TkMapper
+  identity: MYSQL
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/stu_tea?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
