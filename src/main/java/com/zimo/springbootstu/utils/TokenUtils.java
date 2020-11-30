@@ -23,10 +23,10 @@ public class TokenUtils {
     /**
      * 生成token
      * @param username 用户名
-     * @param perName 权限名
+     * @param perNum 权限名
      * @return
      */
-    public static String token(String username, String perName) {
+    public static String token(String username, Integer perNum) {
 
         String token  = "";
         try {
@@ -38,7 +38,7 @@ public class TokenUtils {
             token = JWT.create()
                     .withHeader(map)
                     .withClaim("username",username)
-                    .withClaim("perName",perName)
+                    .withClaim("perNum",perNum)
                     .withExpiresAt(date)
                     .sign(algorithm);
         } catch (Exception e) {
