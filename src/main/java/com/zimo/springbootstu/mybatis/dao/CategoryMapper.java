@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface CategoryMapper extends TkMapper<Category> {
 
+    // 根据父类id 查找子类 集合
     List<Category> findListByParentId(Integer parentId);
 }

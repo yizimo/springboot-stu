@@ -5,7 +5,7 @@
 <mapper namespace="com.zimo.springbootstu.mybatis.dao.UserMapper">
 
     <!--  User selectByUserName(String username);-->
-    <select id="selectByUserName" >
+    <select id="selectByUserName" resultType="com.zimo.springbootstu.bean.User">
         select * from user where username = #{username}
     </select>
 </mapper>

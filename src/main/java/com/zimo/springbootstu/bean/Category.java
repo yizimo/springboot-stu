@@ -15,6 +15,7 @@ public class Category {
     private String name;
     private Integer parentId;
     private List<Category> categoryList;
+    private List<Course> courses;
 
     public Integer getId() {
         return id;
@@ -48,6 +49,14 @@ public class Category {
         this.categoryList = categoryList;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public String toString() {
         return "Category{" +
@@ -55,6 +64,7 @@ public class Category {
                 ", name='" + name + '\'' +
                 ", parentId=" + parentId +
                 ", categoryList=" + categoryList +
+                ", courses=" + courses +
                 '}';
     }
 }

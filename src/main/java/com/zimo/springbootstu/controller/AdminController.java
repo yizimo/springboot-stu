@@ -23,6 +23,6 @@ public class AdminController {
      * @return
      */
     public ResultBody findListCourseByLimit(@Param("page") int page, @Param("size") int size) {
-        return ResultBody.success(courseService.findList(page,size));
+        return ResultBody.success(courseService.findList(page));
     }
 }

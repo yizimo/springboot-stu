@@ -5,30 +5,54 @@ import java.util.List;
 
 public class PageResult <T> implements Serializable {
 
-    private Long total;//返回记录数
-    private List<T> rows;//结果
-
-    public PageResult(Long total, List<T> rows) {
-        this.total = total;
-        this.rows = rows;
+    /**
+     * 当前页码
+     */
+    private int pageNum;
+    /**
+     * 每页数量
+     */
+    private int pageSize;
+    /**
+     * 记录总数
+     */
+    private long totalSize;
+    /**
+     * 页码总数
+     */
+    private int totalPages;
+    /**
+     * 数据模型
+     */
+    private List<?> content;
+    public int getPageNum() {
+        return pageNum;
     }
-
-    public PageResult() {
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
-
-    public Long getTotal() {
-        return total;
+    public int getPageSize() {
+        return pageSize;
     }
-
-    public List<T> getRows() {
-        return rows;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
-
-    public void setRows(List<T> rows) {
-        this.rows = rows;
+    public long getTotalSize() {
+        return totalSize;
     }
-
-    public void setTotal(Long total) {
-        this.total = total;
+    public void setTotalSize(long totalSize) {
+        this.totalSize = totalSize;
+    }
+    public int getTotalPages() {
+        return totalPages;
+    }
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+    public List<?> getContent() {
+        return content;
+    }
+    public void setContent(List<?> content) {
+        this.content = content;
     }
 }

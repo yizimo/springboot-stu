@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends TkMapper<User> {
 
+    // 根据用户查找用户
     User selectByUserName(String username);
 }
