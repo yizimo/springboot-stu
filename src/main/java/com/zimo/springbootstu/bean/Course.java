@@ -6,6 +6,7 @@ import tk.mybatis.mapper.annotation.KeySql;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.List;
 
 public class Course {
 
@@ -13,7 +14,7 @@ public class Course {
     @Column(name = "id")
     @KeySql(useGeneratedKeys = true)
     private Integer id;
-    private Integer userId;   // 用户id
+    private Integer userId;   // 教师id
     private Integer categoryId;     // 分类id
     private Integer secCaId;        // 二级分类id
     private String courseName;      // 标题
@@ -21,10 +22,13 @@ public class Course {
     private String url;             // 图片路径
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date creatTime;         // 创建时间
+    private Double money;           // 价格
     private Integer type; // 1 上架， 2 下架
     private Integer otherType; // 1 热卖   2 新品   3 其他
 
     private User user;
+    private List<Chapter> chapters;
+    private List<Comment> comments;
 
     public Integer getId() {
         return id;
@@ -90,6 +94,14 @@ public class Course {
         this.creatTime = creatTime;
     }
 
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
     public Integer getType() {
         return type;
     }
@@ -114,20 +126,19 @@ public class Course {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", categoryId=" + categoryId +
-                ", secCaId=" + secCaId +
-                ", courseName='" + courseName + '\'' +
-                ", courseInfo='" + courseInfo + '\'' +
-                ", url='" + url + '\'' +
-                ", creatTime=" + creatTime +
-                ", type=" + type +
-                ", otherType=" + otherType +
-                ", user=" + user +
-                '}';
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

@@ -5,13 +5,20 @@ import com.zimo.springbootstu.service.CategoryService;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.ResultBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController("search")
 public class SearchController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
     CategoryService categoryService;
@@ -30,6 +37,29 @@ public class SearchController {
         PageResult<Course> pageResult =
                 courseService.findListBySecCaId(page, secCaId);
         return ResultBody.success(pageResult);
+    }
+
+    /**
+     * 智能补全
+     * @param name
+     * @return
+     */
+    @GetMapping("/course/completion")
+    public ResultBody searchNameCompletion(String name) {
+        List<String> strings = courseService.searchNameCompletion(name);
+        return ResultBody.success(strings);
+    }
+
+    /**
+     * 搜索结果
+     * @param name
+     * @return
+     */
+    @GetMapping("/course/{name}")
+    public ResultBody searchByName(@PathVariable String name) {
+        List<Course> courses = courseService.searchByName(name);
+        logger.info(courses.toString());
+        return ResultBody.success(courses);
     }
 
 
