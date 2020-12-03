@@ -104,8 +104,6 @@ public class CourseService {
         Course course = courseMapper.selectByPrimaryKey(id);
         List<Chapter> chapters = findListChapterByCourseId(id);
         course.setChapters(chapters);
-        List<Comment> comments = findListCommentByCourseId(id);
-        course.setComments(comments);
         logger.info(course.toString());
         return course;
     }
@@ -176,8 +174,10 @@ public class CourseService {
     private PageResult ListCourseByPage(int page, Example example) {
         PageHelper.startPage(page,10);
         List<Course> courses = courseMapper.selectByExample(example);
-        PageInfo<Course> pageInfo = new PageInfo<>();
+        PageInfo<Course> pageInfo = new PageInfo<>(courses);
         logger.info(pageInfo.toString());
         return PageUtils.getPageResult(pageInfo);
     }
+
+
 }

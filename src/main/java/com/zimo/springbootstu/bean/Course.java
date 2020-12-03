@@ -1,6 +1,7 @@
 package com.zimo.springbootstu.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
+@Data
 public class Course {
 
     @Id
@@ -30,115 +32,4 @@ public class Course {
     private List<Chapter> chapters;
     private List<Comment> comments;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Integer getSecCaId() {
-        return secCaId;
-    }
-
-    public void setSecCaId(Integer secCaId) {
-        this.secCaId = secCaId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getCourseInfo() {
-        return courseInfo;
-    }
-
-    public void setCourseInfo(String courseInfo) {
-        this.courseInfo = courseInfo;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getCreatTime() {
-        return creatTime;
-    }
-
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
-    }
-
-    public Double getMoney() {
-        return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getOtherType() {
-        return otherType;
-    }
-
-    public void setOtherType(Integer otherType) {
-        this.otherType = otherType;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<Chapter> getChapters() {
-        return chapters;
-    }
-
-    public void setChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
 }

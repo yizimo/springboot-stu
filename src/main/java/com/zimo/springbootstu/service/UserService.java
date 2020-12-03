@@ -48,6 +48,7 @@ public class UserService {
         user1.setTelephone(telePhone);
         user1.setUsername(username);
         user1.setType(type);
+        user1.setNickName(username);
         userMapper.insert(user);
         return Msg.success();
     }
@@ -80,6 +81,27 @@ public class UserService {
     public Msg updateUserInfo(User user) {
         userMapper.updateByPrimaryKeySelective(user);
         return Msg.success();
+    }
+
+    /**
+     * 更新密码
+     * @param id
+     * @param password
+     * @param newPassword
+     * @return
+     */
+    public Msg updatePassword(Integer id, String password, String newPassword) {
+        User user = userMapper.selectByPrimaryKey(id);
+        password = Md5Utils.string2Md5(password);
+        if(user.getPassword().equals(password)) {
+            User user1 = new User();
+            user1.setId(id);
+            newPassword = Md5Utils.string2Md5(newPassword);
+            user1.setPassword(newPassword);
+            userMapper.updateByPrimaryKeySelective(user1);
+            return  Msg.success();
+        }
+        return Msg.fail().add("info","旧密码错误");
     }
 
 
