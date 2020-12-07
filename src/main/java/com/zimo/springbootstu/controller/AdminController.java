@@ -1,6 +1,8 @@
 package com.zimo.springbootstu.controller;
 
+import com.zimo.springbootstu.bean.Advertise;
 import com.zimo.springbootstu.bean.User;
+import com.zimo.springbootstu.service.AdvertiseService;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.service.UserService;
 import com.zimo.springbootstu.utils.PageResult;
@@ -25,6 +27,9 @@ public class AdminController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AdvertiseService advertiseService;
 
     /**
      * 分页查询用户列表
@@ -76,6 +81,58 @@ public class AdminController {
         return ResultBody.success(null);
     }
 
+
+    /**
+     * 广告的分页获取
+     * @param page
+     * @return
+     */
+    @GetMapping("/advertise/list/limit")
+    public ResultBody findListAdvertiseLimit(@RequestParam("page")int page) {
+        PageResult list = advertiseService.getList(page);
+        return ResultBody.success(list);
+    }
+
+    /**
+     * 搜索广告分页展示
+     * @param page
+     * @param title
+     * @return
+     */
+    @GetMapping("/search/advertise/list/limit")
+    public ResultBody searchAdvertiseByTitleLimit(@RequestParam("page") int page, @RequestParam("title") String title) {
+        PageResult pageResult = advertiseService.searchTitleByLimit(page, title);
+        return ResultBody.success(pageResult);
+    }
+
+    /**
+     * 添加广告
+     * @param advertise
+     * @return
+     */
+    @PostMapping("/insert/advertise")
+    public ResultBody insertAdvertise(@RequestBody Advertise advertise) {
+
+        advertiseService.insertAdvertise(advertise);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 广告上下架，广告修改，
+     * @param advertise
+     * @return
+     */
+    @PostMapping("/update/advertise")
+    public ResultBody updateAdvertise(@RequestBody Advertise advertise) {
+        advertiseService.updateAdvertise(advertise);
+        return ResultBody.success(null);
+    }
+
+    @PostMapping("/delete/advertise")
+    public ResultBody deleteAdvertise(Integer id) {
+        advertiseService.deleteAdvertise(id);
+        return ResultBody.success(null);
+    }
 
 
 

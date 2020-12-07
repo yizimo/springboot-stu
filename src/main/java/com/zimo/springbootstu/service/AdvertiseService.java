@@ -45,6 +45,22 @@ public class AdvertiseService {
     }
 
     /**
+     * 分页模糊搜索广告
+     * @param page
+     * @param title
+     * @return
+     */
+    public PageResult searchTitleByLimit(int page, String title) {
+        title = '%' + title +'%';
+        logger.info("page:" + page + ",title" + title);
+        Example example = new Example(Advertise.class);
+        example.createCriteria().andLike("title",title);
+        List<Advertise> advertises = advertiseMapper.selectByExample(example);
+        PageResult pageResult = pageByAdvertise(advertises, page);
+        return pageResult;
+    }
+
+    /**
      * 插入广告
      * @param advertise
      */
