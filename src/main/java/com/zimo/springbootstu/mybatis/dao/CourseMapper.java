@@ -17,4 +17,10 @@ public interface CourseMapper extends TkMapper<Course> {
 
     // 搜索结果
     List<Course> findListCourseBySearch(String name);
+
+    //  根据分类id 查找文章
+    List<Course> findListCourseByCategoryId(Integer categoryId);
+
+    // 二级分类查找
+    List<Course> findListCourseByCateSecId(Integer SecCaId);
 }

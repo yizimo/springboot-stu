@@ -10,6 +10,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        System.out.println("进来了拦截期");
         registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/**");
     }
 

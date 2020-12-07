@@ -5,7 +5,7 @@
 <mapper namespace="com.zimo.springbootstu.mybatis.dao.CourseMapper">
 
     <select id="findListByOtherType" resultType="com.zimo.springbootstu.bean.Course">
-        select * from course where other_type = #{otherType}
+        select * from course where other_type = #{otherType} and `type` = 1
     </select>
 
     <select id="findListNameBySearch" resultType="String" >
@@ -14,6 +14,14 @@
 
     <select id="findListCourseBySearch" resultType="com.zimo.springbootstu.bean.Course" >
         select * from course where course_name like #{name}
+    </select>
+
+    <select id="findListCourseByCategoryId" resultType="com.zimo.springbootstu.bean.Course">
+        select * from course where category_id = #{categoryId}
+    </select>
+
+    <select id="findListCourseByCateSecId" resultType="com.zimo.springbootstu.bean.Course">
+        select * from course where sec_ca_id = #{SecCaId}
     </select>
 
 </mapper>

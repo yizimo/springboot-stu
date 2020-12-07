@@ -1,14 +1,18 @@
 package com.zimo.springbootstu.controller;
 
+import com.zimo.springbootstu.bean.User;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.utils.ResultBody;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/admin")
+@CrossOrigin("*")
+
 public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);

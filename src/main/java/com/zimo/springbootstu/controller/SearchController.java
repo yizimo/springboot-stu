@@ -8,14 +8,15 @@ import com.zimo.springbootstu.utils.ResultBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("search")
+@Controller()
+@ResponseBody
+@RequestMapping("/search")
+@CrossOrigin("*")
 public class SearchController {
 
     private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
@@ -61,6 +62,4 @@ public class SearchController {
         logger.info(courses.toString());
         return ResultBody.success(courses);
     }
-
-
 }

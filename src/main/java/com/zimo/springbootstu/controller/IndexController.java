@@ -8,13 +8,15 @@ import com.zimo.springbootstu.service.CategoryService;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.utils.ResultBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("index")
+@Controller()
+@ResponseBody
+@RequestMapping("/index")
+@CrossOrigin()
 public class IndexController {
 
     @Autowired
@@ -31,7 +33,7 @@ public class IndexController {
      * @return
      */
     @GetMapping("/category/{parentId}")
-    public ResultBody indexCategory(@PathVariable("parentId") Integer parentId) {
+    public ResultBody indexCategory(@PathVariable(name = "parentId") Integer parentId) {
         List<Category> categories = categoryService.findListByParentId(parentId);
         return ResultBody.success(categories.subList(0,categories.size() > 7 ? 7 : categories.size()));
     }

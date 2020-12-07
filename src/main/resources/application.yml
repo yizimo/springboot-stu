@@ -7,12 +7,14 @@ mapper:
   mappers: com.zimo.springbootstu.mybatis.TkMapper
   identity: MYSQL
 spring:
+  resources:
+    static-locations: classpath:/static/
   mvc:
     throw-exception-if-no-handler-found: true
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/stu_tea?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/sql_hr?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: 123456
+    password: hanyu123
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: 127.0.0.1

@@ -15,4 +15,5 @@ public class Advertise {
     private Integer id;
     private String title;
     private String url;
+    private Integer status;
 }

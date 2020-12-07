@@ -20,6 +20,16 @@ public class CategoryService {
     CourseMapper courseMapper;
 
     /**
+     * 根据id 查找分类
+     * @param id
+     * @return
+     */
+    public Category findCategoryById(Integer id) {
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        return category;
+    }
+
+    /**
      * 根据父类id 查找分类
      * @param categoryParentId
      * @return
@@ -43,13 +53,12 @@ public class CategoryService {
 
         // 下级分类填充课程
         for (Category category : categories) {
-            Example example = new Example(Course.class);
-            example.createCriteria().andEqualTo("categoryId",id);
-            List<Course> courses = courseMapper.selectByExample(example);
+            List<Course> courses = courseMapper.findListCourseByCategoryId(category.getId());
             category.setCourses(courses.subList(0,courses.size() > 5 ? 5 : courses.size()));
         }
         return categories;
     }
+
 
 
 
