@@ -1,15 +1,16 @@
 package com.zimo.springbootstu.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zimo.springbootstu.bean.User;
 import com.zimo.springbootstu.mybatis.dao.UserMapper;
-import com.zimo.springbootstu.utils.Md5Utils;
-import com.zimo.springbootstu.utils.Msg;
-import com.zimo.springbootstu.utils.RedisUtil;
-import com.zimo.springbootstu.utils.TokenUtils;
+import com.zimo.springbootstu.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -65,6 +66,9 @@ public class UserService {
         if(user == null) {
            return Msg.fail().add("info","用户名错误");
         }
+        if(user.getStatus() == 0) {
+            return Msg.fail().add("info","账号被禁用");
+        }
         if(password.equals(user.getPassword())) {
             String token = TokenUtils.token(username, user.getType());
             redisUtil.setByTime(username,token);
@@ -102,6 +106,66 @@ public class UserService {
             return  Msg.success();
         }
         return Msg.fail().add("info","旧密码错误");
+    }
+
+    /**
+     * 分页查询用户列表
+     * @param page
+     * @return
+     */
+    public PageResult findListUserByPage(int page) {
+        logger.info("findListUserByPage:" + page);
+        List<User> users = userMapper.selectAll();
+        PageResult pageResult = pageGeneral(users, page);
+        logger.info(pageResult.toString());
+        return pageResult;
+    }
+
+    /**
+     * 根据用户名搜索，并分页
+     * @param username
+     * @param page
+     * @return
+     */
+    public PageResult searchUserByUsername(String username,int page) {
+        username = '%' + username + '%';
+        logger.info("searchUserByUsername:" + username);
+        List<User> users = userMapper.findUserByUserName(username);
+        PageResult pageResult = pageGeneral(users, page);
+        logger.info(pageResult.toString());
+        return pageResult;
+    }
+
+    /**
+     * 禁用，启用
+     * @param status
+     * @param id
+     */
+    public void updateUserStatusById(Integer status, Integer id) {
+        logger.info("updateUserStatusById, status: " + status + ", id:" + id);
+        int i = userMapper.updateUserStatusById(status, id);
+    }
+
+    /**
+     * 更改权限
+     * @param type
+     * @param id
+     */
+    public void updateUserTypeById(Integer type, Integer id) {
+        logger.info("updateUserTypeById: type:" + type + ",id:" + id);
+        userMapper.updateUserTypeById(type,id);
+    }
+
+    /**
+     * 通用分页代码
+     * @param users
+     * @param page
+     * @return
+     */
+    private PageResult pageGeneral(List<User> users,int page) {
+        PageHelper.startPage(page,10);
+        PageInfo<User> userPageInfo = new PageInfo<>(users);
+        return PageUtils.getPageResult(userPageInfo);
     }
 
 

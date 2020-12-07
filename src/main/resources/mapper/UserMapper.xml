@@ -8,4 +8,14 @@
     <select id="selectByUserName" resultType="com.zimo.springbootstu.bean.User">
         select * from user where username = #{username}
     </select>
+
+    <update id="updateUserStatusById" >
+        update user set status = #{status} where id = #{id}
+    </update>
+    <update id="updateUserTypeById" >
+        update user set `type` = #{type} where id = #{id}
+    </update>
+    <select id="findUserByUserName" resultType="com.zimo.springbootstu.bean.User">
+        select * from user where username = #{username}
+    </select>
 </mapper>
