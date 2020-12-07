@@ -57,11 +57,11 @@ public class CourseService {
      * @return
      */
     public PageResult<Course> findListBySecCaId(int page, Integer secCaId) {
-
-        Example example = new Example(Course.class);
-        example.createCriteria().andEqualTo("secCaId",secCaId);
-        PageResult pageResult = ListCourseByPage(page, example);
-        return pageResult;
+        PageHelper.startPage(page,10);
+        List<Course> courses =courseMapper.findListCourseByCateSecId(secCaId);
+        PageInfo<Course> pageInfo = new PageInfo<>(courses);
+        logger.info(pageInfo.toString());
+        return PageUtils.getPageResult(pageInfo);
     }
 
     /**

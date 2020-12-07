@@ -140,9 +140,10 @@ public class AdminController {
     /**
      * 分页查询
      * @param page
+     * @param size
      * @return
      */
-    public ResultBody findListCourseByLimit(@Param("page") int page) {
+    public ResultBody findListCourseByLimit(@Param("page") int page, @Param("size") int size) {
         return ResultBody.success(courseService.findList(page));
     }
 }

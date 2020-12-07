@@ -24,14 +24,12 @@ public class CategoryController {
     @Autowired
     CourseService courseService;
     /**
-     * 分类页面
-     * @param id
+     * 分类页面的分类
      * @param parentId
      * @return
      */
-    @GetMapping("/list/{id}/{parentId}")
-    public ResultBody findListCategoryCourseByIdAndParentId(@PathVariable(name = "id") Integer id,
-                                                               @PathVariable(name = "parentId") Integer parentId) {
+    @GetMapping("/list/{parentId}")
+    public ResultBody findListCategoryCourseByIdAndParentId( @PathVariable(name = "parentId") Integer parentId) {
         Category category = categoryService.findCategoryById(parentId);
         List<Category> categoriesByParentId = categoryService.findListByParentId(parentId);
         HashMap<String ,Object> map = new HashMap<>();
@@ -40,8 +38,5 @@ public class CategoryController {
         return ResultBody.success(map);
     }
 
-    public ResultBody findListCourseByIdAndParentId(@PathVariable(name = "id") Integer id) {
-        List<Category> categoriesAndCourseById = categoryService.findListAndCourseById(id);
-        return ResultBody.success(categoriesAndCourseById);
-    }
+
 }
