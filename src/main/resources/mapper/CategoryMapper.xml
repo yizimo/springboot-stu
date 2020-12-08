@@ -8,4 +8,12 @@
     <select id="findListByParentId" resultType="com.zimo.springbootstu.bean.Category">
         select * from category where parent_id = #{parentId}
     </select>
+
+    <update id="updateCategoryParentIdByParentId" >
+        update category set parent_id = #{parentId} where parent_id = #{id}
+    </update>
+
+    <select id="searchListByCategoryName" resultType="com.zimo.springbootstu.bean.Category" >
+        select * from category where name like #{name}
+    </select>
 </mapper>

@@ -24,4 +24,12 @@
         select * from course where sec_ca_id = #{SecCaId}
     </select>
 
+    <update id="updateCourseSecIdBySecId" >
+        update course set sec_ca_id = #{secCaId} where sec_ca_id = #{id}
+    </update>
+
+    <update id="updateCourseCategoryIdByCategoryId" >
+        update course set category_id = #{categoryId} where category_id = #{id}
+    </update>
+
 </mapper>

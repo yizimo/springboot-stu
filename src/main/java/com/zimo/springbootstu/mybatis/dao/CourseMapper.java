@@ -2,6 +2,7 @@ package com.zimo.springbootstu.mybatis.dao;
 
 import com.zimo.springbootstu.bean.Course;
 import com.zimo.springbootstu.mybatis.TkMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,10 @@ public interface CourseMapper extends TkMapper<Course> {
 
     // 二级分类查找
     List<Course> findListCourseByCateSecId(Integer SecCaId);
+
+    // 删除二级分类，修改课程的所属二级分类
+    void updateCourseSecIdBySecId(@Param("secCaId") Integer secCaId,@Param("id")Integer id);
+
+    // 删除三级分类，修改课程所属三级分类
+    void updateCourseCategoryIdByCategoryId(@Param("categoryId") Integer categoryId, @Param("id") Integer id);
 }
