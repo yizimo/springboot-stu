@@ -69,6 +69,7 @@ public class UserService {
         if(user.getStatus() == 0) {
             return Msg.fail().add("info","账号被禁用");
         }
+        password = Md5Utils.string2Md5(password);
         if(password.equals(user.getPassword())) {
             String token = TokenUtils.token(username, user.getType());
             redisUtil.setByTime(username,token);

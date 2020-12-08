@@ -41,7 +41,7 @@ public class SearchController {
     }
 
     /**
-     * 智能补全
+     * 首页智能补全
      * @param name
      * @return
      */
@@ -52,7 +52,7 @@ public class SearchController {
     }
 
     /**
-     * 搜索结果
+     * 首页搜索结果
      * @param name
      * @return
      */

@@ -124,10 +124,16 @@ public class AdminController {
      */
     @PostMapping("/update/advertise")
     public ResultBody updateAdvertise(@RequestBody Advertise advertise) {
+        logger.info(advertise.toString());
         advertiseService.updateAdvertise(advertise);
         return ResultBody.success(null);
     }
 
+    /**
+     * 广告删除
+     * @param id
+     * @return
+     */
     @PostMapping("/delete/advertise")
     public ResultBody deleteAdvertise(Integer id) {
         advertiseService.deleteAdvertise(id);
