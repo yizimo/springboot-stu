@@ -2,14 +2,8 @@ package com.zimo.springbootstu.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zimo.springbootstu.bean.Chapter;
-import com.zimo.springbootstu.bean.Comment;
-import com.zimo.springbootstu.bean.Course;
-import com.zimo.springbootstu.bean.Lesson;
-import com.zimo.springbootstu.mybatis.dao.ChapterMapper;
-import com.zimo.springbootstu.mybatis.dao.CommentMapper;
-import com.zimo.springbootstu.mybatis.dao.CourseMapper;
-import com.zimo.springbootstu.mybatis.dao.LessonMapper;
+import com.zimo.springbootstu.bean.*;
+import com.zimo.springbootstu.mybatis.dao.*;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.PageUtils;
 import org.slf4j.Logger;
@@ -37,6 +31,9 @@ public class CourseService {
 
     @Autowired
     LessonMapper lessonMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     /**
      * 分页查找课程
@@ -103,11 +100,25 @@ public class CourseService {
     public Course findCourseById(Integer id) {
         Course course = courseMapper.selectByPrimaryKey(id);
         List<Chapter> chapters = findListChapterByCourseId(id);
+        User user = findUserByCourseId(course.getUserId());
+        course.setUser(user);
+        List<Comment> comments = findListCommentByCourseId(course.getId());
+        course.setComments(comments);
         course.setChapters(chapters);
         logger.info(course.toString());
         return course;
     }
 
+    /**
+     * 查找课程的发表者
+     * @param userId
+     * @return
+     */
+    public User findUserByCourseId(Integer userId) {
+
+        User user = userMapper.selectByPrimaryKey(userId);
+        return  user;
+    }
     /**
      * 根据课程id 查找章节
      * @param courseId
@@ -148,7 +159,13 @@ public class CourseService {
                 .andEqualTo("courseId",courseId);
         List<Comment> comments = commentMapper.selectByExample(example);
         for (Comment comment : comments) {
+            User user = findUserByCourseId(comment.getUserId());
+            comment.setUser(user);
             List<Comment> commentByCommentId = findListCommentByCommentId(comment.getId());
+            for (Comment comment1 : commentByCommentId) {
+                User user1 = findUserByCourseId(comment.getUserId());
+                comment1.setUser(user1);
+            }
             comment.setComments(commentByCommentId);
         }
         return comments;
