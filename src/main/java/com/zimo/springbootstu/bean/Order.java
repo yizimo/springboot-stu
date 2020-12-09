@@ -13,7 +13,7 @@ public class Order {
     private double money;
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date creatTime;
-    private String oid;
+    private String oid;    // 订单号
     private Integer type;   // 状态
 
 }
