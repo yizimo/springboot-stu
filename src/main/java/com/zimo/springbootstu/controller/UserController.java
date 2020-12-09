@@ -1,13 +1,20 @@
 package com.zimo.springbootstu.controller;
 
+import com.aliyuncs.exceptions.ClientException;
+import com.zimo.springbootstu.bean.Ends;
 import com.zimo.springbootstu.bean.User;
 import com.zimo.springbootstu.service.UserService;
 import com.zimo.springbootstu.utils.Msg;
 import com.zimo.springbootstu.utils.ResultBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("user")
+import java.util.HashMap;
+
+@Controller()
+@ResponseBody
+@RequestMapping("/user")
 @CrossOrigin("*")
 public class UserController {
 
@@ -31,8 +38,61 @@ public class UserController {
         return ResultBody.success(null);
     }
 
-    public ResultBody findListCourseByUserId(Integer userId) {
+    /**
+     * 登陆
+     * @param username
+     * @param password
+     * @return
+     */
+    @GetMapping("/login")
+   public ResultBody login(@RequestParam("username") String username,
+                           @RequestParam("password") String password) {
+       Msg msg = userService.login(username, password);
+       if(msg.getCode() == 100) {
+           return ResultBody.success(msg.getExtend());
+       } else {
+           return ResultBody.error("-1",msg.getExtend().get("info").toString());
+       }
+   }
 
+    /**
+     * 获取手机验证码
+     * @param phone
+     * @return
+     */
+    @GetMapping("/phone/code")
+    public ResultBody phoneCode(@RequestParam("phone") String phone) throws ClientException {
+        userService.phoneCode(phone);
         return ResultBody.success(null);
+    }
+
+    /**
+     * 根据手机号重置密码
+     * @param phone
+     * @param code
+     * @return
+     */
+    @GetMapping("/phone/update/password")
+    public ResultBody updatePasswordByPhone(@RequestParam("phone") String phone,
+                                            @RequestParam("code") Integer code) {
+        Msg msg = userService.updatePasswordByPhone(phone, code);
+        if(msg.getCode() == 100) {
+            return ResultBody.success(null);
+        }
+        return ResultBody.error("-1",msg.getExtend().get("info").toString());
+    }
+
+    /**
+     * 注册
+     * @return
+     */
+    @PostMapping("/register")
+    public ResultBody register(@RequestBody Ends user) {
+        Msg msg = userService.register(user.getUsername(),user.getPassword(),user.getCode(),user.getPhone());
+        if(msg.getCode() == 100) {
+            return ResultBody.success(null);
+        } else {
+            return ResultBody.error("-1",msg.getExtend().get("info").toString());
+        }
     }
 }

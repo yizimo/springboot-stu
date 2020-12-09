@@ -1,5 +1,6 @@
 package com.zimo.springbootstu.service;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zimo.springbootstu.bean.User;
@@ -24,6 +25,16 @@ public class UserService {
     RedisUtil redisUtil;
 
     /**
+     * 获取验证码
+     * @param phone
+     */
+    public void phoneCode(String phone) throws ClientException {
+        Integer code = AliyunSmsUtils.getCode();
+        redisUtil.setByTime(phone,code+"");
+        AliyunSmsUtils.sendSms(phone,code);
+    }
+
+    /**
      * 注册
      * @param username
      * @param password
@@ -33,13 +44,14 @@ public class UserService {
      */
     public Msg register(String username, String password, String code, String telePhone) {
 
+        logger.info("username:" + username + ",password:" + password + ",code:" + code + ",teltephone" + telePhone);
         String teleCode = (String) redisUtil.get(telePhone);
         if(!code.equals(teleCode)) {
-            Msg.fail().add("info","手机验证码错误");
+            return Msg.fail().add("info","手机验证码错误");
         }
-        User user = userMapper.selectByUserName(username);
-        if(user != null) {
-            Msg.fail().add("info","用户名重复");
+        List<User> user = userMapper.selectByUserName(username);
+        if(user.size() > 0) {
+            return Msg.fail().add("info","用户名重复");
         }
         User user1 = new User();
         password = Md5Utils.string2Md5(password);
@@ -48,8 +60,10 @@ public class UserService {
         user1.setTelephone(telePhone);
         user1.setUsername(username);
         user1.setType(1);
+        user1.setStatus(1);
+        user1.setSex(3);
         user1.setNickName(username);
-        userMapper.insert(user);
+        userMapper.insertUseGeneratedKeys(user1);
         return Msg.success();
     }
 
@@ -60,11 +74,13 @@ public class UserService {
      * @return
      */
     public Msg login(String username, String  password) {
-        User user = userMapper.selectByUserName(username);
-        logger.info("登录：" + user.toString());
-        if(user == null) {
+        List<User> users = userMapper.selectByUserName(username);
+
+        if(users.size() == 0 ) {
            return Msg.fail().add("info","用户名错误");
         }
+        User user = users.get(0);
+        logger.info("登录：" + user.toString());
         if(user.getStatus() == 0) {
             return Msg.fail().add("info","账号被禁用");
         }
@@ -72,9 +88,27 @@ public class UserService {
         if(password.equals(user.getPassword())) {
             String token = TokenUtils.token(username, user.getType());
             redisUtil.setByTime(username,token);
-            return Msg.success().add("user",user);
+            return Msg.success().add("user",user).add("token",token);
         }
         return Msg.fail().add("info","密码错误");
+    }
+
+    /**
+     * 根据手机号更新密码
+     * @param phone
+     * @param code
+     * @return
+     */
+    public Msg updatePasswordByPhone(String phone, Integer code) {
+        String string = (String) redisUtil.get(phone);
+        logger.info("code:" + string);
+        Integer c = Integer.valueOf(string);
+        if(code.equals(c)) {
+            String password = Md5Utils.string2Md5("123456");
+            userMapper.updatePasswordByPhone(phone,password);
+            return Msg.success();
+        }
+        return Msg.fail().add("info","验证码错误");
     }
 
     /**

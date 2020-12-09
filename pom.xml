@@ -36,6 +36,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.4.3</version>
+        </dependency>
+        <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>RELEASE</version>

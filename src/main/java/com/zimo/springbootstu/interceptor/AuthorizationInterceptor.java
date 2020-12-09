@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 
 public class AuthorizationInterceptor implements HandlerInterceptor {
@@ -24,7 +25,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info(request.getRequestURL() + " ");
+        logger.info(request.getRequestURL() + " " + "," );
+        Map<String, String[]> map = request.getParameterMap();
+        for( String str: map.keySet()) {
+            logger.info("key:" + str + ",value:" + map.get(str));
+        }
         String token = request.getHeader("token");
         if(!(handler instanceof HandlerMethod)) {
             return true;

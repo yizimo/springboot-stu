@@ -11,11 +11,14 @@ import java.util.List;
 public interface UserMapper extends TkMapper<User> {
 
     // 根据用户查找用户
-    User selectByUserName(String username);
+    List<User> selectByUserName(String username);
     // 更改用户状态
     int updateUserStatusById(@Param("status") Integer status, @Param("id") Integer id);
     // 更改权限
     int updateUserTypeById(@Param("type")int type, @Param("id") Integer id);
     // 搜索
     List<User> findUserByUserName(String username);
+    // 验证码修改密码
+    int updatePasswordByPhone(@Param("phone") String phone,
+                              @Param("password") String password);
 }
