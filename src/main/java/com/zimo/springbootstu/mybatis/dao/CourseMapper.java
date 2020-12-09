@@ -30,4 +30,7 @@ public interface CourseMapper extends TkMapper<Course> {
 
     // 删除三级分类，修改课程所属三级分类
     void updateCourseCategoryIdByCategoryId(@Param("categoryId") Integer categoryId, @Param("id") Integer id);
+
+    List<Integer> findUserHaveCourse(@Param("userId") Integer userId,
+                                     @Param("id") Integer id);
 }

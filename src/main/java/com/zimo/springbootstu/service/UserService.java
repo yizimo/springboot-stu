@@ -29,13 +29,12 @@ public class UserService {
      * @param password
      * @param code
      * @param telePhone
-     * @param type 1  用户    2 教师
      * @return
      */
-    public Msg register(String username, String password, String code, String telePhone,Integer type) {
+    public Msg register(String username, String password, String code, String telePhone) {
 
         String teleCode = (String) redisUtil.get(telePhone);
-        if(code.equals(teleCode)) {
+        if(!code.equals(teleCode)) {
             Msg.fail().add("info","手机验证码错误");
         }
         User user = userMapper.selectByUserName(username);
@@ -48,7 +47,7 @@ public class UserService {
         user1.setPassword(password);
         user1.setTelephone(telePhone);
         user1.setUsername(username);
-        user1.setType(type);
+        user1.setType(1);
         user1.setNickName(username);
         userMapper.insert(user);
         return Msg.success();

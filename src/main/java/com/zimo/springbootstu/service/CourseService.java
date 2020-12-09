@@ -79,7 +79,7 @@ public class CourseService {
      */
     public List<String> searchNameCompletion(String name) {
         List<String> listNameBySearch = courseMapper.findListNameBySearch("%" + name + "%");
-        return  listNameBySearch;
+        return  listNameBySearch.subList(0,listNameBySearch.size() > 7 ? 7 : listNameBySearch.size());
     }
 
     /**
@@ -107,6 +107,20 @@ public class CourseService {
         course.setChapters(chapters);
         logger.info(course.toString());
         return course;
+    }
+
+    /**
+     * 该文章，用户是否购买
+     * @param userId
+     * @param id
+     * @return
+     */
+    public Boolean findUserHaveCourse(Integer userId, Integer id) {
+        List<Integer> list = courseMapper.findUserHaveCourse(userId, id);
+        if(list.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
     /**

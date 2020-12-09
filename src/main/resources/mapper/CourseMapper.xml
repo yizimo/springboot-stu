@@ -32,4 +32,8 @@
         update course set category_id = #{categoryId} where category_id = #{id}
     </update>
 
+    <select id="findUserHaveCourse" resultType="int" >
+        select id from user_course where user_id = #{userId} and course_id = #{id}
+    </select>
+
 </mapper>

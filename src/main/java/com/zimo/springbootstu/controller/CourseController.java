@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller()
@@ -30,16 +31,21 @@ public class CourseController {
     CategoryService categoryService;
 
     /**
-     * 根据id 查找课程
+     * 根据id 查找课程,并且判断用户能否观看课时
      * @param id
      * @return
      */
-    @GetMapping("/{id}")
-    public ResultBody findCourseById(@PathVariable("id") Integer id) {
+    @GetMapping("/{id}/{userId}")
+    public ResultBody findCourseById(@PathVariable("id") Integer id,
+                                     @PathVariable("userId") Integer userId) {
 
         logger.info("id：" + id);
         Course course = courseService.findCourseById(id);
-        return ResultBody.success(course);
+        Boolean userHaveCourse = courseService.findUserHaveCourse(userId, id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("course",course);
+        map.put("userHaveCourse",userHaveCourse);
+        return ResultBody.success(map);
     }
 
     /**
