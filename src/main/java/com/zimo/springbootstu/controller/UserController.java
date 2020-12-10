@@ -1,8 +1,12 @@
 package com.zimo.springbootstu.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.zimo.springbootstu.bean.Course;
 import com.zimo.springbootstu.bean.Ends;
 import com.zimo.springbootstu.bean.User;
+import com.zimo.springbootstu.interceptor.AuthorizationInterceptor;
+import com.zimo.springbootstu.interceptor.Token;
+import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.service.UserService;
 import com.zimo.springbootstu.utils.Msg;
 import com.zimo.springbootstu.utils.ResultBody;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Controller()
 @ResponseBody
@@ -20,6 +25,17 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CourseService courseService;
+
+    @GetMapping("/info")
+    @Token
+    public ResultBody getUserInfo() {
+        Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
+        User user = userService.getUserInfo(userId);
+        return ResultBody.success(user);
+    }
 
     @PostMapping("/update/info")
     public ResultBody updateUserInfo(@RequestBody User user) {
@@ -94,5 +110,21 @@ public class UserController {
         } else {
             return ResultBody.error("-1",msg.getExtend().get("info").toString());
         }
+    }
+
+    @GetMapping("/user/course/userid")
+    @Token
+    public ResultBody findUserCourseByUserId() {
+        Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
+        List<Course> courses = courseService.findUserCourseByUserId(userId);
+        return ResultBody.success(courses);
+    }
+
+    @GetMapping("/search/user/course/userid/{name}")
+    @Token
+    public ResultBody searchUserCourseName(@PathVariable("name") String name) {
+        Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
+        List<Course> courses = courseService.searchUserCourseByName(userId, name);
+        return ResultBody.success(courses);
     }
 }

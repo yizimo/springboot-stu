@@ -158,7 +158,35 @@ public class CourseService {
         Example example = new Example(Lesson.class);
         example.createCriteria().andEqualTo("chapterId",chapterId);
         List<Lesson> lessons = lessonMapper.selectByExample(example);
+        for (Lesson lesson : lessons) {
+            List<Comment> comments = findListCommentByLessonId(lesson.getId());
+            lesson.setCommentList(comments);
+        }
         return lessons;
+    }
+
+    /**
+     * 查找课时的评论
+     * @param lessonId
+     * @return
+     */
+    private List<Comment> findListCommentByLessonId(Integer lessonId) {
+        Example example = new Example(Comment.class);
+        example.createCriteria()
+                .andEqualTo("commentId",0)
+                .andEqualTo("lessonId",lessonId);
+        List<Comment> comments = commentMapper.selectByExample(example);
+        for (Comment comment : comments) {
+            User user = findUserByCourseId(comment.getUserId());
+            comment.setUser(user);
+            List<Comment> commentByCommentId = findListCommentByCommentId(comment.getId());
+            for (Comment comment1 : commentByCommentId) {
+                User user1 = findUserByCourseId(comment.getUserId());
+                comment1.setUser(user1);
+            }
+            comment.setComments(commentByCommentId);
+        }
+        return comments;
     }
 
     /**
@@ -196,6 +224,29 @@ public class CourseService {
                 .andEqualTo("commentId",commentId);
         List<Comment> comments = commentMapper.selectByExample(example);
         return comments;
+    }
+
+
+    /**
+     * 查找用户的我的课程
+     * @param id
+     * @return
+     */
+    public List<Course> findUserCourseByUserId(Integer id) {
+        List<Course> userCourseByUserId = courseMapper.findUserCourseByUserId(id);
+        return userCourseByUserId;
+    }
+
+    /**
+     * 查找用户的我的课程的搜索
+     * @param id
+     * @param name
+     * @return
+     */
+    public List<Course> searchUserCourseByName(Integer id, String name) {
+        name = '%' + name + '%';
+        List<Course> courses = courseMapper.searchUserCourseByName(id, name);
+        return courses;
     }
 
     /**

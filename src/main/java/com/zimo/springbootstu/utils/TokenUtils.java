@@ -37,8 +37,8 @@ public class TokenUtils {
             map.put("alg","HS256");
             token = JWT.create()
                     .withHeader(map)
-                    .withClaim("userId",userId)
-                    .withClaim("perNum",perNum)
+                    .withClaim("userId",userId+"")
+                    .withClaim("perNum",perNum+"")
                     .withExpiresAt(date)
                     .sign(algorithm);
         } catch (Exception e) {

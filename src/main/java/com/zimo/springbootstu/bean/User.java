@@ -21,4 +21,5 @@ public class User {
     private Integer sex;  // 0 保密， 1 男， 2 女
     private Integer type; // 1 用户 2  教师 3  管理员
     private Integer status;   // 状态   0 禁用，  1 启用
+    private String url;
 }

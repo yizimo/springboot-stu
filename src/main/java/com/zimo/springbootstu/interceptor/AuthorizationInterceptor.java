@@ -20,6 +20,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationInterceptor.class);
 
+    private static final ThreadLocal t1 = new ThreadLocal();
+
     @Autowired
     RedisUtil redisUtil;
 
@@ -62,6 +64,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                         Integer perNum = Integer.valueOf(TokenUtils.getInfo(token, "perNum"));
                         Integer validate = Integer.valueOf(annotation1.validate());
                         if(perNum >= validate) {
+                            t1.set(userId);
                             // 重新设置token 过期时间
                             redisUtil.expire(userId);
                             return true;
@@ -70,6 +73,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                     }
 
                 }
+                t1.set(userId);
                 redisUtil.expire(userId);
             }
         }
@@ -87,6 +91,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse,
                                 Object o, Exception e) throws Exception {
+        t1.remove();
+    }
+
+    public static String get() {
+
+        return t1.get().toString();
     }
 
 }

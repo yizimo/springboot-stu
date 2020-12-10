@@ -21,6 +21,7 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
+
     @Autowired
     RedisUtil redisUtil;
 
@@ -87,6 +88,7 @@ public class UserService {
         password = Md5Utils.string2Md5(password);
         if(password.equals(user.getPassword())) {
             String token = TokenUtils.token(user.getId(), user.getType());
+            logger.info("token:" + token);
             redisUtil.setByTime(user.getId()+"",token);
             return Msg.success().add("user",user).add("token",token);
         }
@@ -109,6 +111,16 @@ public class UserService {
             return Msg.success();
         }
         return Msg.fail().add("info","验证码错误");
+    }
+
+    /**
+     * 根据主键查找用户
+     * @param userId
+     * @return
+     */
+    public User getUserInfo(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        return user;
     }
 
     /**

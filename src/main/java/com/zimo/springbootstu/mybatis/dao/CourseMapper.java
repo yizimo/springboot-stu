@@ -33,4 +33,11 @@ public interface CourseMapper extends TkMapper<Course> {
 
     List<Integer> findUserHaveCourse(@Param("userId") Integer userId,
                                      @Param("id") Integer id);
+
+    // 查找用户的课程
+    List<Course> findUserCourseByUserId(Integer id);
+
+    // 查找用户课程根据名字搜索
+    List<Course> searchUserCourseByName(@Param("id") Integer id,
+                                        @Param("name" ) String name);
 }

@@ -2,6 +2,7 @@ package com.zimo.springbootstu.controller;
 
 import com.zimo.springbootstu.bean.Category;
 import com.zimo.springbootstu.bean.Course;
+import com.zimo.springbootstu.interceptor.Token;
 import com.zimo.springbootstu.service.CategoryService;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.utils.PageResult;
@@ -37,7 +38,7 @@ public class CourseController {
      */
     @GetMapping("/{id}/{userId}")
     public ResultBody findCourseById(@PathVariable(value = "id") Integer id ,
-                                     @PathVariable("userId") Integer userId) {
+                                     @PathVariable(value = "userId") Integer userId) {
         Course course = courseService.findCourseById(id);
         HashMap<String, Object> map = new HashMap<>();
         map.put("course",course);
@@ -48,6 +49,13 @@ public class CourseController {
             map.put("userHaveCourse",userHaveCourse);
         }
         return ResultBody.success(map);
+    }
+
+    @GetMapping("/{id}")
+    @Token
+    public ResultBody findCourseById(@PathVariable(value = "id") Integer id ) {
+        Course course = courseService.findCourseById(id);
+        return ResultBody.success(course);
     }
 
     /**
