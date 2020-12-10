@@ -36,15 +36,17 @@ public class CourseController {
      * @return
      */
     @GetMapping("/{id}/{userId}")
-    public ResultBody findCourseById(@PathVariable("id") Integer id,
+    public ResultBody findCourseById(@PathVariable(value = "id") Integer id ,
                                      @PathVariable("userId") Integer userId) {
-
-        logger.info("id：" + id);
         Course course = courseService.findCourseById(id);
-        Boolean userHaveCourse = courseService.findUserHaveCourse(userId, id);
         HashMap<String, Object> map = new HashMap<>();
         map.put("course",course);
-        map.put("userHaveCourse",userHaveCourse);
+        if(id == 0) {
+            map.put("userHaveCourse",false);
+        } else {
+            Boolean userHaveCourse = courseService.findUserHaveCourse(userId, id);
+            map.put("userHaveCourse",userHaveCourse);
+        }
         return ResultBody.success(map);
     }
 
