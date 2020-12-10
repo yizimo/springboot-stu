@@ -32,6 +32,14 @@ public class RedisUtil {
     }
 
     /**
+     * 每次访问之后重新设定15分钟
+     * @param key
+     */
+    public void expire(String key) {
+        redisTemplate.expire(key,15,TimeUnit.MINUTES);
+    }
+
+    /**
      * 获取
      * @param key
      * @return

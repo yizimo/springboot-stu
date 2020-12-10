@@ -44,12 +44,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                     throw new ZimoException("-1","请登录");
                 }
                 // 校验token 正确性
-                String username = TokenUtils.getInfo(token, "username");
-                logger.info("token 中 username:" + username);
-                if("" == username)  {
+                String userId = TokenUtils.getInfo(token, "userId");
+                logger.info("token 中 userId:" + userId);
+                if("" == userId)  {
                     throw new ZimoException("-1","token校验失败");
                 }
-                String value = redisUtil.get(username,String.class);
+                String value = redisUtil.get(userId,String.class);
                 if(value == null || "".equals(value)) {
                     throw new ZimoException("-1","token 不存在");
                 }
@@ -62,12 +62,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                         Integer perNum = Integer.valueOf(TokenUtils.getInfo(token, "perNum"));
                         Integer validate = Integer.valueOf(annotation1.validate());
                         if(perNum >= validate) {
+                            // 重新设置token 过期时间
+                            redisUtil.expire(userId);
                             return true;
                         }
                         throw new ZimoException("-1","权限不够");
                     }
 
                 }
+                redisUtil.expire(userId);
             }
         }
         return true;

@@ -22,11 +22,11 @@ public class TokenUtils {
 
     /**
      * 生成token
-     * @param username 用户名
+     * @param userId 用户名
      * @param perNum 权限名
      * @return
      */
-    public static String token(String username, Integer perNum) {
+    public static String token(Integer userId, Integer perNum) {
 
         String token  = "";
         try {
@@ -37,7 +37,7 @@ public class TokenUtils {
             map.put("alg","HS256");
             token = JWT.create()
                     .withHeader(map)
-                    .withClaim("username",username)
+                    .withClaim("userId",userId)
                     .withClaim("perNum",perNum)
                     .withExpiresAt(date)
                     .sign(algorithm);
