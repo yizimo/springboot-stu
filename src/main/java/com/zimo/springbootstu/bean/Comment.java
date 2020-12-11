@@ -2,13 +2,18 @@ package com.zimo.springbootstu.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
 @Data
 public class Comment {
-
+    @Id
+    @Column(name = "id")
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
     private Integer commentId;      // 评论id 0 代表评论   >0 代表回复
     private Integer courseId;       // 课程id

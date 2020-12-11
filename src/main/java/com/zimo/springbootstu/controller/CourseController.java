@@ -2,6 +2,7 @@ package com.zimo.springbootstu.controller;
 
 import com.zimo.springbootstu.bean.Category;
 import com.zimo.springbootstu.bean.Course;
+import com.zimo.springbootstu.interceptor.AuthorizationInterceptor;
 import com.zimo.springbootstu.interceptor.Token;
 import com.zimo.springbootstu.service.CategoryService;
 import com.zimo.springbootstu.service.CourseService;
@@ -39,7 +40,7 @@ public class CourseController {
     @GetMapping("/{id}/{userId}")
     public ResultBody findCourseById(@PathVariable(value = "id") Integer id ,
                                      @PathVariable(value = "userId") Integer userId) {
-        Course course = courseService.findCourseById(id);
+        Course course = courseService.findCourseById(id, userId);
         HashMap<String, Object> map = new HashMap<>();
         map.put("course",course);
         if(id == 0) {
@@ -51,10 +52,29 @@ public class CourseController {
         return ResultBody.success(map);
     }
 
+    /**
+     * 课时以观看
+     * @param id
+     * @return
+     */
+    @GetMapping("/read/lesson/{id}")
+    @Token
+    public ResultBody readLessonById(@PathVariable(value = "id") Integer id) {
+        Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
+        courseService.insertUserLessonType(userId,id);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 进入章节详情
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     @Token
     public ResultBody findCourseById(@PathVariable(value = "id") Integer id ) {
-        Course course = courseService.findCourseById(id);
+        Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
+        Course course = courseService.findCourseById(id,userId);
         return ResultBody.success(course);
     }
 

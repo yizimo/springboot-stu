@@ -40,4 +40,8 @@ public interface CourseMapper extends TkMapper<Course> {
     // 查找用户课程根据名字搜索
     List<Course> searchUserCourseByName(@Param("id") Integer id,
                                         @Param("name" ) String name);
+
+    // 判断用户是否阅读过
+    List<Integer> userIsReadLesson(@Param("userId") Integer userId,
+                                   @Param("lessonId") Integer lessonId);
 }

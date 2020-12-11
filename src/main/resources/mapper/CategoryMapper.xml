@@ -16,4 +16,6 @@
     <select id="searchListByCategoryName" resultType="com.zimo.springbootstu.bean.Category" >
         select * from category where name like #{name}
     </select>
+
+
 </mapper>

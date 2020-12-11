@@ -35,6 +35,9 @@ public class CourseService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    UserLessonTypeMapper userLessonTypeMapper;
+
     /**
      * 分页查找课程
      * @param page
@@ -97,9 +100,9 @@ public class CourseService {
      * @param id
      * @return
      */
-    public Course findCourseById(Integer id) {
+    public Course findCourseById(Integer id, Integer userId) {
         Course course = courseMapper.selectByPrimaryKey(id);
-        List<Chapter> chapters = findListChapterByCourseId(id);
+        List<Chapter> chapters = findListChapterByCourseId(id, userId);
         User user = findUserByCourseId(course.getUserId());
         course.setUser(user);
         List<Comment> comments = findListCommentByCourseId(course.getId());
@@ -138,12 +141,12 @@ public class CourseService {
      * @param courseId
      * @return
      */
-    public List<Chapter> findListChapterByCourseId(Integer courseId) {
+    public List<Chapter> findListChapterByCourseId(Integer courseId, Integer userId) {
         Example example = new Example(Chapter.class);
         example.createCriteria().andEqualTo("courseId",courseId);
         List<Chapter> chapters = chapterMapper.selectByExample(example);
         for (Chapter chapter : chapters) {
-            List<Lesson> lessons = findListLessionByChapterId(chapter.getId());
+            List<Lesson> lessons = findListLessionByChapterId(chapter.getId(), userId);
             chapter.setLessons(lessons);
         }
         return chapters;
@@ -154,11 +157,20 @@ public class CourseService {
      * @param chapterId
      * @return
      */
-    public List<Lesson> findListLessionByChapterId(Integer chapterId) {
+    public List<Lesson> findListLessionByChapterId(Integer chapterId, Integer userId) {
         Example example = new Example(Lesson.class);
         example.createCriteria().andEqualTo("chapterId",chapterId);
         List<Lesson> lessons = lessonMapper.selectByExample(example);
+
         for (Lesson lesson : lessons) {
+            if(userId != 0) {
+                List<Integer> list = courseMapper.userIsReadLesson(userId, lesson.getId());
+                if(list.size() > 0) {
+                    lesson.setType(1);
+                } else {
+                    lesson.setType(0);
+                }
+            }
             List<Comment> comments = findListCommentByLessonId(lesson.getId());
             lesson.setCommentList(comments);
         }
@@ -247,6 +259,18 @@ public class CourseService {
         name = '%' + name + '%';
         List<Course> courses = courseMapper.searchUserCourseByName(id, name);
         return courses;
+    }
+
+    /**
+     * 课时以观看
+     * @param userId
+     * @param lessonId
+     */
+    public void insertUserLessonType(Integer userId, Integer lessonId) {
+        UserLessonType userLessonType = new UserLessonType();
+        userLessonType.setUserId(userId);
+        userLessonType.setLessonId(lessonId);
+        userLessonTypeMapper.insertUseGeneratedKeys(userLessonType);
     }
 
     /**

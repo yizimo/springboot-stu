@@ -37,21 +37,26 @@
     </select>
     
     <select id="findUserCourseByUserId" resultType="com.zimo.springbootstu.bean.Course">
-        SELECT c.*
+        select * from course where  id in (
+SELECT uc.course_id
         from `user` u
         join user_course uc
-        on u.id = uc.user_id
-        join course c
-        on c.id = uc.course_id where u.id = #{id}
+        on u.id = uc.user_id where u.id = #{id}
+      )
     </select>
 
     <select id="searchUserCourseByName" resultType="com.zimo.springbootstu.bean.Course">
-        SELECT c.*
+         select * from course where course_title like #{name} and   id in (
+SELECT uc.course_id
         from `user` u
         join user_course uc
-        on u.id = uc.user_id
-        join course c
-        on c.id = uc.course_id where u.id = #{id} and c.course_title like #{name}
+        on u.id = uc.user_id where u.id = #{id}
+        )
     </select>
+
+    <select id="userIsReadLesson" resultType="int" >
+        select id from user_lesson_type where user_id = #{userId} and lesson_id = #{lessonId}
+    </select>
+
 
 </mapper>
