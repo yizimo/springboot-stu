@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller()
 @ResponseBody
 @RequestMapping("/admin")
@@ -33,26 +35,29 @@ public class AdminController {
 
     /**
      * 分页查询用户列表
-     * @param page
      * @return
      */
     @GetMapping("/user/list/page")
-    public ResultBody findListUserLimit(@RequestParam("page") int page) {
-        PageResult pageResult = userService.findListUserByPage(page);
+    public ResultBody findListUserLimit() {
+        List<User> pageResult = userService.findListUserByPage();
         return ResultBody.success(pageResult);
     }
 
     /**
      * 根据用户名的分页搜索
-     * @param page
      * @param username
      * @return
      */
-    @GetMapping("/search/user/list/page/{username}")
-    public ResultBody searchUserByUsernameLimit(@RequestParam("page") int page,
-                                                  @PathVariable("username") String username) {
-        PageResult pageResult = userService.searchUserByUsername(username, page);
-        return ResultBody.success(pageResult);
+    @GetMapping(value = {"/search/user/list/page/{username}","/search/user/list/page"})
+    public ResultBody searchUserByUsernameLimit(@PathVariable(value = "username" , required = false) String username) {
+        if(username == " " || username == null) {
+            List<User> pageResult = userService.findListUserByPage();
+            return ResultBody.success(pageResult);
+        } else {
+            List<User> pageResult = userService.searchUserByUsername(username);
+            return ResultBody.success(pageResult);
+        }
+
     }
 
     /**
@@ -84,35 +89,39 @@ public class AdminController {
 
     /**
      * 广告的分页获取
-     * @param page
      * @return
      */
     @GetMapping("/advertise/list/limit")
-    public ResultBody findListAdvertiseLimit(@RequestParam("page")int page) {
-        PageResult list = advertiseService.getList(page);
+    public ResultBody findListAdvertiseLimit() {
+        List<Advertise> list = advertiseService.getListAll();
         return ResultBody.success(list);
     }
 
     /**
      * 搜索广告分页展示
-     * @param page
      * @param title
      * @return
      */
-    @GetMapping("/search/advertise/list/limit")
-    public ResultBody searchAdvertiseByTitleLimit(@RequestParam("page") int page, @RequestParam("title") String title) {
-        PageResult pageResult = advertiseService.searchTitleByLimit(page, title);
-        return ResultBody.success(pageResult);
+    @GetMapping(value = "/search/advertise/list/limit")
+    public ResultBody searchAdvertiseByTitleLimit(@RequestParam(value = "title", required = false) String title) {
+        if(title == null) {
+            List<Advertise> list = advertiseService.getListAll();
+            return ResultBody.success(list);
+        } else {
+            List<Advertise> pageResult = advertiseService.searchTitleByLimit(title);
+            return ResultBody.success(pageResult);
+        }
     }
 
     /**
      * 添加广告
-     * @param advertise
      * @return
      */
     @PostMapping("/insert/advertise")
-    public ResultBody insertAdvertise(@RequestBody Advertise advertise) {
-
+    public ResultBody insertAdvertise(@RequestParam("title") String title,@RequestParam("url") String url) {
+        Advertise advertise = new Advertise();
+        advertise.setTitle(title);
+        advertise.setUrl(url);
         advertiseService.insertAdvertise(advertise);
         return ResultBody.success(null);
     }
@@ -136,6 +145,7 @@ public class AdminController {
      */
     @PostMapping("/delete/advertise")
     public ResultBody deleteAdvertise(Integer id) {
+        logger.info("deleteAdvertise, id = " + id);
         advertiseService.deleteAdvertise(id);
         return ResultBody.success(null);
     }

@@ -16,7 +16,7 @@
         update user set `type` = #{type} where id = #{id}
     </update>
     <select id="findUserByUserName" resultType="com.zimo.springbootstu.bean.User">
-        select * from user where username = #{username}
+        select * from user where username like #{username}
     </select>
     <update id="updatePasswordByPhone" >
         update user set password= #{password} where  telephone = #{phone}

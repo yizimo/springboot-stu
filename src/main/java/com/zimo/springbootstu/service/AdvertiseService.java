@@ -38,26 +38,23 @@ public class AdvertiseService {
      * 广告列表分页
      * @return
      */
-    public PageResult getList(int page) {
+    public List<Advertise> getListAll() {
         List<Advertise> advertises = advertiseMapper.selectAll();
-        PageResult pageResult = pageByAdvertise(advertises, page);
-        return pageResult;
+        return advertises;
     }
 
     /**
      * 分页模糊搜索广告
-     * @param page
      * @param title
      * @return
      */
-    public PageResult searchTitleByLimit(int page, String title) {
+    public List<Advertise> searchTitleByLimit(String title) {
         title = '%' + title +'%';
-        logger.info("page:" + page + ",title" + title);
+        logger.info( ",title" + title);
         Example example = new Example(Advertise.class);
         example.createCriteria().andLike("title",title);
         List<Advertise> advertises = advertiseMapper.selectByExample(example);
-        PageResult pageResult = pageByAdvertise(advertises, page);
-        return pageResult;
+        return advertises;
     }
 
     /**
@@ -66,7 +63,7 @@ public class AdvertiseService {
      */
     public void insertAdvertise(Advertise advertise) {
         advertise.setStatus(0);
-        advertiseMapper.insert(advertise);
+        advertiseMapper.insertUseGeneratedKeys(advertise);
         logger.info("广告插入成功:" + advertise.getId());
     }
 

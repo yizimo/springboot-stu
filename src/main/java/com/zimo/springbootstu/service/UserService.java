@@ -156,30 +156,24 @@ public class UserService {
 
     /**
      * 分页查询用户列表
-     * @param page
      * @return
      */
-    public PageResult findListUserByPage(int page) {
-        logger.info("findListUserByPage:" + page);
+    public List<User> findListUserByPage() {
         List<User> users = userMapper.selectAll();
-        PageResult pageResult = pageGeneral(users, page);
-        logger.info(pageResult.toString());
-        return pageResult;
+        return users;
     }
 
     /**
      * 根据用户名搜索，并分页
      * @param username
-     * @param page
      * @return
      */
-    public PageResult searchUserByUsername(String username,int page) {
+    public List<User> searchUserByUsername(String username) {
         username = '%' + username + '%';
         logger.info("searchUserByUsername:" + username);
         List<User> users = userMapper.findUserByUserName(username);
-        PageResult pageResult = pageGeneral(users, page);
-        logger.info(pageResult.toString());
-        return pageResult;
+        logger.info(users.toString());
+        return users;
     }
 
     /**
