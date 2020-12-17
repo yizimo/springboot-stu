@@ -22,5 +22,6 @@ public class Order {
     private String oid;    // 订单号
     private Integer type;   // 状态
     private Course course;
+    private User user;
 
 }

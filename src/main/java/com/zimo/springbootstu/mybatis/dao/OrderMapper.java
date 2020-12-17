@@ -21,4 +21,7 @@ public interface OrderMapper extends TkMapper<Order> {
 
     @Select("select * from `order` where user_id = #{userId}")
     List<Order> selectListOder(Integer userId);
+
+    @Select("select * from `order` ")
+    List<Order> findListAll();
 }

@@ -1,9 +1,11 @@
 package com.zimo.springbootstu.controller;
 
 import com.zimo.springbootstu.bean.Advertise;
+import com.zimo.springbootstu.bean.Order;
 import com.zimo.springbootstu.bean.User;
 import com.zimo.springbootstu.service.AdvertiseService;
 import com.zimo.springbootstu.service.CourseService;
+import com.zimo.springbootstu.service.OrderService;
 import com.zimo.springbootstu.service.UserService;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.ResultBody;
@@ -32,6 +34,10 @@ public class AdminController {
 
     @Autowired
     AdvertiseService advertiseService;
+
+
+    @Autowired
+    OrderService orderService;
 
     /**
      * 分页查询用户列表
@@ -148,6 +154,22 @@ public class AdminController {
         logger.info("deleteAdvertise, id = " + id);
         advertiseService.deleteAdvertise(id);
         return ResultBody.success(null);
+    }
+
+    /**
+     * 教师或者后台管理获取订单
+     * @param userId
+     * @return
+     */
+    @GetMapping("/order/list")
+    public ResultBody findListOrderByAllOrUserId(Integer userId) {
+        if(userId == 0) {
+            List<Order> orders = orderService.findListAllOrder();
+            return ResultBody.success(orders);
+        } else {
+            List<Order> orders = orderService.findListOdetr(userId);
+            return ResultBody.success(orders);
+        }
     }
 
 
