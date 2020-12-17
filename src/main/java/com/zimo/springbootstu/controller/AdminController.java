@@ -1,12 +1,10 @@
 package com.zimo.springbootstu.controller;
 
 import com.zimo.springbootstu.bean.Advertise;
+import com.zimo.springbootstu.bean.Comment;
 import com.zimo.springbootstu.bean.Order;
 import com.zimo.springbootstu.bean.User;
-import com.zimo.springbootstu.service.AdvertiseService;
-import com.zimo.springbootstu.service.CourseService;
-import com.zimo.springbootstu.service.OrderService;
-import com.zimo.springbootstu.service.UserService;
+import com.zimo.springbootstu.service.*;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.ResultBody;
 import org.apache.ibatis.annotations.Param;
@@ -38,6 +36,9 @@ public class AdminController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    CommentService commentService;
 
     /**
      * 分页查询用户列表
@@ -170,6 +171,24 @@ public class AdminController {
             List<Order> orders = orderService.findListOdetr(userId);
             return ResultBody.success(orders);
         }
+    }
+
+    /**
+     * 获取用户的评论
+     * @param userId
+     * @return
+     */
+    @GetMapping("/comment/list/{userId}")
+    public ResultBody getListCommentByUserId(@PathVariable("userId") Integer userId) {
+        List<Comment> listCommentById = commentService.getListCommentById(userId);
+        return ResultBody.success(listCommentById);
+    }
+
+    @PostMapping("/delete/comment/id")
+    public ResultBody deleteCommentById(Integer id) {
+        System.out.println(id);
+        commentService.deleteCommentBuId(id);
+        return ResultBody.success(null);
     }
 
 

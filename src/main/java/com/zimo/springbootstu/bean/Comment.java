@@ -26,4 +26,6 @@ public class Comment {
     private int commentDislike;     // 踩
     private List<Comment> comments; // 回复
     private User user;
+    private Course course;
+    private Lesson lesson;
 }
