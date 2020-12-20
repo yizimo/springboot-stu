@@ -68,4 +68,20 @@ public class OrderService {
         System.out.println(orders.toString());
         return orders;
     }
+
+    /**
+     * 查找文章的购买人
+     * @param courseId
+     * @return
+     */
+    public List<Order> findListOrderByCourseIdAdmin(Integer courseId) {
+        List<Order> orders = orderMapper.findListByCourseId(courseId);
+        for (Order order : orders) {
+            User user = userMapper.selectByPrimaryKey(order.getUserId());
+            order.setUser(user);
+            System.out.println(order.toString());
+        }
+        return orders;
+    }
+
 }

@@ -13,15 +13,15 @@
     </select>
 
     <select id="findListCourseBySearch" resultType="com.zimo.springbootstu.bean.Course" >
-        select * from course where course_title like #{name}
+        select * from course where course_title like #{name} and `type` = 1
     </select>
 
     <select id="findListCourseByCategoryId" resultType="com.zimo.springbootstu.bean.Course">
-        select * from course where category_id = #{categoryId}
+        select * from course where category_id = #{categoryId} and `type` = 1
     </select>
 
     <select id="findListCourseByCateSecId" resultType="com.zimo.springbootstu.bean.Course">
-        select * from course where sec_ca_id = #{SecCaId}
+        select * from course where sec_ca_id = #{SecCaId} and `type` = 1
     </select>
 
     <update id="updateCourseSecIdBySecId" >
@@ -37,7 +37,7 @@
     </select>
     
     <select id="findUserCourseByUserId" resultType="com.zimo.springbootstu.bean.Course">
-        select * from course where  id in (
+        select * from course where  `type` = 1  and id in (
 SELECT uc.course_id
         from `user` u
         join user_course uc
@@ -46,7 +46,7 @@ SELECT uc.course_id
     </select>
 
     <select id="searchUserCourseByName" resultType="com.zimo.springbootstu.bean.Course">
-         select * from course where course_title like #{name} and   id in (
+         select * from course where `type` = 1  and course_title like #{name} and   id in (
 SELECT uc.course_id
         from `user` u
         join user_course uc

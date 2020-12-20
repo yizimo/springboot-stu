@@ -21,5 +21,6 @@ public class Category {
     private Integer parentId;
     private List<Category> categoryList;
     private List<Course> courses;
+    private Category category;
 
 }

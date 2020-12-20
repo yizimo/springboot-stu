@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,6 +40,9 @@ public class CourseService {
     @Autowired
     UserLessonTypeMapper userLessonTypeMapper;
 
+    @Autowired
+    CategoryMapper categoryMapper;
+
     /**
      * 分页查找课程
      * @param page
@@ -46,6 +51,7 @@ public class CourseService {
     public PageResult<Course> findList(int page) {
 
         Example example = new Example(Course.class);
+        example.createCriteria().andEqualTo("type",1);
         PageResult pageResult = ListCourseByPage(page, example);
         return pageResult;
     }
@@ -272,6 +278,123 @@ public class CourseService {
         userLessonType.setLessonId(lessonId);
         userLessonTypeMapper.insertUseGeneratedKeys(userLessonType);
     }
+
+    /**
+     * 获取文章列表管理员或者教师
+     * @param userId
+     * @return
+     */
+    public List<Course> findListCourseByAdmin(Integer userId) {
+        List<Course> courses = new ArrayList<>();
+        if(userId == null) {
+             courses = courseMapper.selectAll();
+        } else {
+            courses = courseMapper.findUserCourseByUserId(userId);
+        }
+        for (Course course : courses) {
+            User user = findUserByCourseId(course.getUserId());
+            course.setUser(user);
+            Category category = categoryMapper.selectByPrimaryKey(course.getCategoryId());
+            course.setCategory(category);
+
+        }
+        return courses;
+    }
+
+    /**
+     *     管理搜索文章
+     * @param name
+     * @param userId
+     * @return
+     */
+    public List<Course> searchListCourseByNameAdmin(String name, Integer userId) {
+        name = "%" + name + "%";
+        logger.info("name:" + name);
+        List<Course> courses = new ArrayList<>();
+        if(userId == null) {
+            Example example = new Example(Course.class);
+            example.createCriteria().andLike("courseTitle",name);
+            courses = courseMapper.selectByExample(example);
+        } else  {
+            Example example = new Example(Course.class);
+            example.createCriteria().andLike("courseTitle",name).andEqualTo("userId",userId);
+            courses = courseMapper.selectByExample(example);
+        }
+        for (Course course : courses) {
+            User user = findUserByCourseId(course.getUserId());
+            course.setUser(user);
+            Category category = categoryMapper.selectByPrimaryKey(course.getCategoryId());
+            course.setCategory(category);
+        }
+        return courses;
+    }
+
+    /**
+     * 修改othertype 或者 type 或者更新文章信息
+     * @param course
+     */
+    public void updateCourseOtherTypeAdmin(Course course) {
+        course.setCreatTime(new Date());
+        courseMapper.updateByPrimaryKeySelective(course);
+    }
+
+    /**
+     * 根据courseId 查找文章
+     * @param courseId
+     * @return
+     */
+    public Course findCourseByCourseIdAdmin(Integer courseId) {
+        Course course = courseMapper.selectByPrimaryKey(courseId);
+        Category categoryThree = categoryMapper.selectByPrimaryKey(course.getCategoryId());
+        course.setCategory(categoryThree);
+        return course;
+
+    }
+
+    /**
+     * 添加文章
+     * @param course
+     */
+    public void insertCourse(Course course) {
+        course.setCreatTime(new Date());
+        courseMapper.insertUseGeneratedKeys(course);
+    }
+
+    /**
+     * 根据文章id 获取章节
+     * @return
+     */
+    public List<Chapter> getListChapterAdmin(Integer courseId) {
+        Example example = new Example(Chapter.class);
+        example.createCriteria().andEqualTo("courseId",courseId);
+        List<Chapter> chapters = chapterMapper.selectByExample(example);
+        return chapters;
+    }
+
+    /**
+     * 修改章节
+     * @param chapter
+     */
+    public void updateChapterAdmin(Chapter chapter) {
+        chapterMapper.updateByPrimaryKeySelective(chapter);
+    }
+
+    /**
+     * 删除章节
+     * @param id
+     */
+    public void deleteChapterByIdAdmin(Integer id) {
+        chapterMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 增加章节
+     * @param chapter
+     */
+    public void insertChapterAdmin(Chapter chapter) {
+        chapterMapper.insertUseGeneratedKeys(chapter);
+    }
+
 
     /**
      * 通用分页代码

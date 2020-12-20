@@ -1,10 +1,8 @@
 package com.zimo.springbootstu.controller;
 
-import com.zimo.springbootstu.bean.Advertise;
-import com.zimo.springbootstu.bean.Comment;
-import com.zimo.springbootstu.bean.Order;
-import com.zimo.springbootstu.bean.User;
+import com.zimo.springbootstu.bean.*;
 import com.zimo.springbootstu.service.*;
+import com.zimo.springbootstu.utils.Msg;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.ResultBody;
 import org.apache.ibatis.annotations.Param;
@@ -39,6 +37,9 @@ public class AdminController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    CategoryService categoryService;
 
     /**
      * 分页查询用户列表
@@ -184,6 +185,11 @@ public class AdminController {
         return ResultBody.success(listCommentById);
     }
 
+    /**
+     * 删除用户的评论
+     * @param id
+     * @return
+     */
     @PostMapping("/delete/comment/id")
     public ResultBody deleteCommentById(Integer id) {
         System.out.println(id);
@@ -191,8 +197,186 @@ public class AdminController {
         return ResultBody.success(null);
     }
 
+    /**
+     * 分类管理加载分类
+     * @return
+     */
+    @GetMapping("/get/list/category")
+    public ResultBody getListCategory() {
 
+        List<Category> categories = categoryService.findListCategoryByParentId(0);
+        return ResultBody.success(categories);
+    }
 
+    /**
+     * 分类修改
+     * @param category
+     * @return
+     */
+    @PostMapping("/update/category")
+    public ResultBody updateCategory(@RequestBody Category category) {
+        categoryService.updateCategory(category);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 添加分类
+     * @param category
+     * @return
+     */
+    @PostMapping("/insert/category")
+    public ResultBody insertCategory(@RequestBody Category category) {
+        categoryService.insertCategory(category);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 删除分类
+     * @param id
+     * @param type
+     * @param parentId
+     * @return
+     */
+    @PostMapping("/delete/category")
+    public ResultBody deleteCategory(@RequestParam("id") Integer id,
+                                      @RequestParam("type") Integer type,
+                                      @RequestParam("parentId") Integer parentId) {
+        Msg msg = categoryService.deleteCategory(id, type, parentId);
+        if(msg.getCode() == 200) {
+            return ResultBody.error("-1",msg.getExtend().get("info").toString());
+        } else {
+            return ResultBody.success(null);
+        }
+    }
+
+    /**
+     * 教师或者管理员获取文章列表
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = {"/course/list/{userId}","/course/list"})
+    public ResultBody getCourseListById(@PathVariable(value = "userId",required = false) Integer userId) {
+        System.out.println(userId);
+        List<Course> courses = courseService.findListCourseByAdmin(userId);
+        return ResultBody.success(courses);
+    }
+
+    /**
+     * 管理搜索
+     * @param userId
+     * @param name
+     * @return
+     */
+    @GetMapping(value = {"/search/course/list/{userId}","/search/course/list"})
+    public ResultBody searchCourseListAdmin(@PathVariable(value = "userId",required = false) Integer userId,
+                                            @RequestParam(value = "name",required = false) String name) {
+        if(userId == null && name == null) {
+            List<Course> courses = courseService.findListCourseByAdmin(userId);
+            return ResultBody.success(courses);
+        } else {
+            List<Course> courses = courseService.searchListCourseByNameAdmin(name, userId);
+            return ResultBody.success(courses);
+        }
+    }
+
+    /**
+     * 修改othertype 或者上下架,修改文章信息
+     * @param course
+     * @return
+     */
+    @PostMapping("/update/other/or/type")
+    public ResultBody updateCourseOtherTypeOrTypeById(@RequestBody Course course) {
+        courseService.updateCourseOtherTypeAdmin(course);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 查找文章购买人
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/course/list/user/{courseId}")
+    public ResultBody findListUserByCourseIdAdmin(@PathVariable("courseId") Integer courseId) {
+        List<Order> orders = orderService.findListOrderByCourseIdAdmin(courseId);
+        return ResultBody.success(orders);
+    }
+
+    /**
+     * 查找文章详情
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/course/one/{courseId}")
+    public ResultBody findCourseByCourseIdAdmin(@PathVariable("courseId") Integer courseId) {
+        Course course = courseService.findCourseByCourseIdAdmin(courseId);
+        return ResultBody.success(course);
+    }
+
+    /**
+     * 根据父类id 查找分类
+     * @param parentId
+     * @return
+     */
+    @GetMapping("/course/list/category/{parentId}")
+    public ResultBody findListCategoryByParentId(@PathVariable("parentId") Integer parentId) {
+        List<Category> categories = categoryService.findListCategoryByParentIdAdmin(parentId);
+        return ResultBody.success(categories);
+    }
+
+    /**
+     * 添加文章
+     * @param course
+     * @return
+     */
+    @PostMapping("/course/insert")
+    public ResultBody insertCourse(@RequestBody Course course) {
+        courseService.insertCourse(course);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 根据文章id 获取章节
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/list/charpter/{courseId}")
+    public ResultBody findListChapterByCourseId(@PathVariable("courseId") Integer courseId) {
+        List<Chapter> chapters = courseService.getListChapterAdmin(courseId);
+        return ResultBody.success(chapters);
+    }
+
+    /**
+     * 添加章节
+     * @param chapter
+     * @return
+     */
+    @PostMapping("/insert/chapter")
+    public ResultBody insertChapter(@RequestBody Chapter chapter) {
+        courseService.insertChapterAdmin(chapter);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 更新章节
+     * @param chapter
+     * @return
+     */
+    @PostMapping("/update/chapter")
+    public ResultBody updateChapter(@RequestBody Chapter chapter) {
+        courseService.updateChapterAdmin(chapter);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 删除章节
+     * @param chapterId
+     * @return
+     */
+    @GetMapping("/delete/chapter/{chapterId}")
+    public ResultBody deleteChapter(@PathVariable("chapterId") Integer chapterId) {
+        courseService.deleteChapterByIdAdmin(chapterId);
+        return ResultBody.success(null);
+    }
 
     /**
      * 分页查询

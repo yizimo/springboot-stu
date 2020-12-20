@@ -39,6 +39,16 @@ public class CategoryService {
     }
 
     /**
+     *  根据父类id 查找分类
+     * @param parentId
+     * @return
+     */
+    public List<Category> findListCategoryByParentIdAdmin(Integer parentId) {
+        List<Category> categories = categoryMapper.findListByParentId(parentId);
+        return categories;
+    }
+
+    /**
      * 根据父类id 查找分类
      * @param categoryParentId
      * @return
@@ -90,6 +100,7 @@ public class CategoryService {
     public Msg deleteCategory(Integer id, Integer type,Integer parentId) {
 
         List<Category> categoryList = categoryMapper.findListByParentId(parentId);
+        log.info("分类长度：" + categoryList.size());
         if(categoryList.size() <= 1) {
             return Msg.fail().add("info","分类最少存在一个");
         }
@@ -118,7 +129,7 @@ public class CategoryService {
      * @param parentId
      * @return
      */
-    public PageResult findListCategoryByParentId(Integer parentId, int page) {
+    public List<Category> findListCategoryByParentId(Integer parentId) {
         List<Category> listByParentId = categoryMapper.findListByParentId(parentId);
         for (Category category : listByParentId) {
             List<Category> parentId1 = categoryMapper.findListByParentId(category.getId());
@@ -128,8 +139,7 @@ public class CategoryService {
             }
             category.setCategoryList(parentId1);
         }
-        PageResult pageResult = categoryListPageResult(listByParentId, page);
-        return pageResult;
+        return listByParentId;
     }
 
     /**

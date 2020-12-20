@@ -30,6 +30,7 @@ public class Course {
     private Integer otherType; // 1 热卖   2 新品   3 其他
 
     private User user;              // 发表人
+    private Category category;      // 分类
     private List<Chapter> chapters;  // 拥有章节
     private List<Comment> comments;   // 拥有评论
 
