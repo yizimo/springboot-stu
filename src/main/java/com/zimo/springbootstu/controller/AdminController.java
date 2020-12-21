@@ -379,6 +379,72 @@ public class AdminController {
     }
 
     /**
+     * 根据章节获取课时内容
+     * @param chapterId
+     * @return
+     */
+    @GetMapping("/get/list/lesson/{chapterId}")
+    public ResultBody findListLessonByChapterId(@PathVariable("chapterId") Integer chapterId)  {
+        List<Lesson> lessons = courseService.getListLessonByChapterIdAdmin(chapterId);
+        return ResultBody.success(lessons);
+    }
+
+    /**
+     * 添加课时
+     * @param lesson
+     * @return
+     */
+        @PostMapping("/insert/lesson/admin")
+    public ResultBody insertLesson(@RequestBody Lesson lesson) {
+        courseService.insertLessonAdmin(lesson);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 更新课时
+     * @param lesson
+     * @return
+     */
+    @PostMapping("/update/lesson/admin")
+    public ResultBody updateLesson(@RequestBody Lesson lesson) {
+        courseService.updateLessonAdmin(lesson);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 根据id 获取课时详细
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/lesson/id/{id}")
+    public ResultBody getLessonByid(@PathVariable("id") Integer id) {
+        Lesson lesson = courseService.findLessonByLessonIdAdmin(id);
+        return ResultBody.success(lesson);
+    }
+
+    /**
+     * 根据id 删除课时内容
+     * @param id
+     * @return
+     */
+    @GetMapping("/delete/lesson/{id}")
+    public ResultBody deleteLessonById(@PathVariable("id") Integer id) {
+        courseService.deleteLessonByLessonIdAdmin(id);
+        return ResultBody.success(null);
+    }
+
+    /**
+     * 根据课时内容获取评论
+     * @param lessonId
+     * @return
+     */
+    @GetMapping("/comment/lesson/id/{lessonId}")
+    public ResultBody getListCommentByLessonId(@PathVariable("lessonId") Integer lessonId) {
+        List<Comment> comments = commentService.getListCommentByLessonId(lessonId);
+        return ResultBody.success(comments);
+    }
+
+    /**
      * 分页查询
      * @param page
      * @param size

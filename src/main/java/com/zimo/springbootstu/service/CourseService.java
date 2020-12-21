@@ -395,6 +395,52 @@ public class CourseService {
         chapterMapper.insertUseGeneratedKeys(chapter);
     }
 
+    /**
+     * 根据章节id获取课时内容
+     * @param chapterId
+     * @return
+     */
+    public List<Lesson> getListLessonByChapterIdAdmin(Integer chapterId) {
+        Example example = new Example(Lesson.class);
+        example.createCriteria().andEqualTo("chapterId",chapterId);
+        List<Lesson> lessons = lessonMapper.selectByExample(example);
+        return lessons;
+    }
+
+    /**
+     * 添加课时
+     * @param lesson
+     */
+    public void insertLessonAdmin(Lesson lesson) {
+        lessonMapper.insertUseGeneratedKeys(lesson);
+    }
+
+    /**
+     * 更新课时
+     * @param lesson
+     */
+    public void updateLessonAdmin(Lesson lesson) {
+        lessonMapper.updateByPrimaryKeySelective(lesson);
+    }
+
+    /**
+     * 查找课时内容
+     * @param id
+     * @return
+     */
+    public Lesson findLessonByLessonIdAdmin(Integer id) {
+        Lesson lesson = lessonMapper.selectByPrimaryKey(id);
+        return lesson;
+    }
+
+    /**
+     * 删除课时内容
+     * @param id
+     */
+    public void deleteLessonByLessonIdAdmin(Integer id) {
+        lessonMapper.deleteByPrimaryKey(id);
+    }
+
 
     /**
      * 通用分页代码
