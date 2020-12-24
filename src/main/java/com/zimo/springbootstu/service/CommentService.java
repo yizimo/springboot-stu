@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -66,9 +67,38 @@ public class CommentService {
      * @param lessonId
      * @return
      */
-    public List<Comment> getListCommentByLessonId(Integer lessonId) {
+    public List<Comment>    getListCommentByLessonId(Integer lessonId) {
         Example example = new Example(Comment.class);
-        example.createCriteria().andEqualTo("lessonId",lessonId);
+        example.createCriteria().andEqualTo("lessonId",lessonId).andEqualTo("commentId",0);
+        List<Comment> comments = commentMapper.selectByExample(example);
+        for (Comment comment : comments) {
+            User user = userMapper.selectByPrimaryKey(comment.getUserId());
+            List<Comment> comments1 = findListCommentByCommentId(comment.getId());
+            comment.setComments(comments1);
+            comment.setUser(user);
+        }
+        return comments;
+    }
+
+    /**
+     * 添加评论或者回复
+     * @param comment
+     */
+    public void insertComment(Comment comment) {
+        comment.setCommentDislike(0);
+        comment.setCommentLike(0);
+        comment.setCommentTime(new Date());
+        commentMapper.insertUseGeneratedKeys(comment);
+    }
+
+    /**
+     * 获取回复
+     * @param commentId
+     * @return
+     */
+    private List<Comment> findListCommentByCommentId(Integer commentId) {
+        Example example = new Example(Comment.class);
+        example.createCriteria().andEqualTo("commentId",commentId);
         List<Comment> comments = commentMapper.selectByExample(example);
         for (Comment comment : comments) {
             User user = userMapper.selectByPrimaryKey(comment.getUserId());

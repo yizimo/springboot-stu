@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,6 +50,29 @@ public class OrderService {
             System.out.println(order.toString());
         }
         System.out.println(orders.toString());
+        return orders;
+    }
+
+    /**
+     * 教师查看订单
+     * @param userId
+     * @return
+     */
+    public List<Order> getListOrderByTeacher(Integer userId) {
+        Example example = new Example(Course.class);
+        example.createCriteria().andEqualTo("userId",userId);
+        List<Course> courses = courseMapper.selectByExample(example);
+        List<Order> orders = new ArrayList<>();
+        for (Course cours : courses) {
+
+            List<Order> orders1 = orderMapper.findListByCourseId(cours.getId());
+            for (Order order : orders1) {
+                order.setCourse(cours);
+                User user = userMapper.selectByPrimaryKey(order.getUserId());
+                order.setUser(user);
+            }
+            orders.addAll(orders1);
+        }
         return orders;
     }
 

@@ -289,7 +289,9 @@ public class CourseService {
         if(userId == null) {
              courses = courseMapper.selectAll();
         } else {
-            courses = courseMapper.findUserCourseByUserId(userId);
+            Example example = new Example(Course.class);
+            example.createCriteria().andEqualTo("userId",userId);
+            courses = courseMapper.selectByExample(example);
         }
         for (Course course : courses) {
             User user = findUserByCourseId(course.getUserId());
@@ -441,6 +443,32 @@ public class CourseService {
         lessonMapper.deleteByPrimaryKey(id);
     }
 
+
+    /**
+     * 根据课时id 获取课时内容和评论
+     * @param lessonId
+     * @return
+     */
+    public Lesson getLessonAndCommentByLessonId(Integer lessonId) {
+        Lesson lesson = lessonMapper.selectByPrimaryKey(lessonId);
+        Example example = new Example(Comment.class);
+        example.createCriteria().andEqualTo("lessonId",lessonId).andEqualTo("commentId",0);
+        List<Comment> comments = commentMapper.selectByExample(example);
+        for (Comment comment : comments) {
+            Example example1 = new Example(Comment.class);
+            example1.createCriteria().andEqualTo("commentId",comment.getId());
+            List<Comment> comments1 = commentMapper.selectByExample(example1);
+            for (Comment comment1 : comments1) {
+                User user = userMapper.selectByPrimaryKey(comment.getUserId());
+                comment1.setUser(user);
+            }
+            comment.setComments(comments1);
+            User user = userMapper.selectByPrimaryKey(comment.getUserId());
+            comment.setUser(user);
+        }
+        lesson.setCommentList(comments);
+        return lesson;
+    }
 
     /**
      * 通用分页代码

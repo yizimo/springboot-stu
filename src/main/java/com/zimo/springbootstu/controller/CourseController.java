@@ -1,10 +1,13 @@
 package com.zimo.springbootstu.controller;
 
 import com.zimo.springbootstu.bean.Category;
+import com.zimo.springbootstu.bean.Comment;
 import com.zimo.springbootstu.bean.Course;
+import com.zimo.springbootstu.bean.Lesson;
 import com.zimo.springbootstu.interceptor.AuthorizationInterceptor;
 import com.zimo.springbootstu.interceptor.Token;
 import com.zimo.springbootstu.service.CategoryService;
+import com.zimo.springbootstu.service.CommentService;
 import com.zimo.springbootstu.service.CourseService;
 import com.zimo.springbootstu.utils.PageResult;
 import com.zimo.springbootstu.utils.ResultBody;
@@ -31,6 +34,9 @@ public class CourseController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    CommentService commentService;
 
     /**
      * 根据id 查找课程,并且判断用户能否观看课时
@@ -76,6 +82,25 @@ public class CourseController {
         Integer userId = Integer.valueOf(AuthorizationInterceptor.get());
         Course course = courseService.findCourseById(id,userId);
         return ResultBody.success(course);
+    }
+
+    /**
+     * 根据课时id 获取课时内容和评论
+     * @param lessonId
+     * @return
+     */
+    @GetMapping("/lesson/comment/{lessonId}")
+    @Token
+    public ResultBody findLessonAndCommentByLessonId(@PathVariable(value = "lessonId") Integer lessonId) {
+        Lesson lesson = courseService.getLessonAndCommentByLessonId(lessonId);
+        return ResultBody.success(lesson);
+    }
+
+    @PostMapping("/insert/comments")
+    public ResultBody insertComment(@RequestBody Comment comment) {
+
+        commentService.insertComment(comment);
+        return ResultBody.success(null);
     }
 
     /**

@@ -165,11 +165,12 @@ public class AdminController {
      */
     @GetMapping("/order/list")
     public ResultBody findListOrderByAllOrUserId(Integer userId) {
+        logger.info("userId:" + userId);
         if(userId == 0) {
             List<Order> orders = orderService.findListAllOrder();
             return ResultBody.success(orders);
         } else {
-            List<Order> orders = orderService.findListOdetr(userId);
+            List<Order> orders = orderService.getListOrderByTeacher(userId);
             return ResultBody.success(orders);
         }
     }
@@ -286,6 +287,7 @@ public class AdminController {
      */
     @PostMapping("/update/other/or/type")
     public ResultBody updateCourseOtherTypeOrTypeById(@RequestBody Course course) {
+        System.out.println(course);
         courseService.updateCourseOtherTypeAdmin(course);
         return ResultBody.success(null);
     }
@@ -442,6 +444,19 @@ public class AdminController {
     public ResultBody getListCommentByLessonId(@PathVariable("lessonId") Integer lessonId) {
         List<Comment> comments = commentService.getListCommentByLessonId(lessonId);
         return ResultBody.success(comments);
+    }
+
+    /**
+     * 添加评论或者回复
+     * @param comment
+     * @return
+     */
+    @PostMapping("/comment/insert")
+    public ResultBody insertComment(@RequestBody Comment comment) {
+        comment.setCommentDislike(0);
+        comment.setCommentLike(0);
+        commentService.insertComment(comment);
+        return ResultBody.success(null);
     }
 
     /**
